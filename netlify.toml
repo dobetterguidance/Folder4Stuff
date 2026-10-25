@@ -1,0 +1,11 @@
+# Connect this repo to Netlify once; every push to main then updates every family phone.
+[build]
+  publish = "app"
+
+# Always check for a fresh app shell so updates reach phones on the next open.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
