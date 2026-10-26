@@ -48,6 +48,13 @@ Each phone keeps its own copy on the device. To share:
 - **When you release a change,** bump `CACHE` in `app/sw.js` (for example `shelf-to-supper-v5` → `v6`) and `APP_VERSION` in `app/index.html`.
 - **Backups:** the Home screen nudges you if a phone hasn't backed up or shared in two weeks. **Settings → Full backup** saves everything, photos included.
 
+## Add groceries by voice
+
+Tap the round **🎤** button on any screen, or **🎤 Say it** on Shopping, and say something like *"milk, two pounds of ground beef and paper towels."* The app splits that into separate items with their quantities. Uncheck anything it misheard, then tap **Add**. Items already on the list aren't added twice.
+
+- **iPhone:** the first time, allow microphone access when asked. If the 🎤 button can't hear you, tap the text box and use the 🎤 key on the keyboard. That works everywhere.
+- **Alexa:** Amazon shut off third-party access to the Alexa shopping list in July 2024. The only route left is a custom skill (*"Alexa, tell Shelf to Supper to add milk"*), and that needs the shared household database from Phase 2.
+
 ## Family-friendly by design
 
 - **Simple mode** (on by default for new phones, set per phone) shows only Food, Spices, Meals, Shopping and Recipes. Turn it off in Settings for receipts, price trends, space photos and temperatures.

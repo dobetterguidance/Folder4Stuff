@@ -45,11 +45,12 @@
 @media(pointer:coarse){.button{min-height:44px}.button.smallbtn{min-height:38px}.nav-btn{min-height:46px}input[type=checkbox]{width:22px;height:22px}}
 .update-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(88px + env(safe-area-inset-bottom));z-index:98;background:var(--forest);color:#fff;border-radius:14px;padding:10px 12px 10px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 14px 30px #0003;width:max-content;max-width:calc(100vw - 24px);font-size:14px}.update-bar .button{background:#c8ead5;color:var(--forest);border-color:#c8ead5}@media(min-width:761px){.update-bar{bottom:22px}}
 .choice-grid{display:flex;flex-wrap:wrap;gap:8px}.choice{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 12px;font-weight:700;cursor:pointer}.choice input{accent-color:var(--forest)}
+.voice-fab{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:60;width:62px;height:62px;border-radius:50%;border:0;background:var(--forest);color:#fff;font-size:27px;box-shadow:0 10px 26px #0b221e55;display:grid;place-items:center}.voice-fab:active{transform:scale(.95)}@media(min-width:761px){.voice-fab{bottom:24px;right:24px}}@media print{.voice-fab{display:none}}
 </style>
 </head>
 <body>
 <div class="app-shell"><aside class="sidebar"><div class="brand"><div class="logo">✿</div><div><strong>Shelf to<br>Supper</strong><small>YOUR FAMILY KITCHEN</small></div></div><nav class="nav-links" id="desktop-nav"></nav><div class="nav-tip"><strong>Less waste. Less wondering.</strong><p style="margin:7px 0 0">One family inventory, every space, simple dinners.</p></div></aside><main class="content"><div class="topline"><div><div class="eyebrow">SHELF TO SUPPER <span class="hide-mobile">/ FAMILY KITCHEN</span></div><div class="tagline" id="todayline"></div></div><button class="button smallbtn" data-action="addItem">＋ Add food</button></div><div id="app"></div></main></div>
-<nav class="mobile-nav" id="mobile-nav"></nav><dialog id="modal"></dialog><div id="toast" hidden></div>
+<button class="voice-fab" data-action="voiceAdd" aria-label="Add to shopping list by voice" title="Add by voice">🎤</button><nav class="mobile-nav" id="mobile-nav"></nav><dialog id="modal"></dialog><div id="toast" hidden></div>
 <script>
 'use strict';
 const STORAGE_KEY='shelf-to-supper-v1'; // preserve previous family inventory
@@ -341,7 +342,7 @@ function renderShopping(){
  const types=[['all','All'],['local','Local stores'],['costco','Bulk trips'],['online','Online orders']];
  const options=STORES.filter(s=>shown.some(r=>r.store.id===s.id));
  const counts={local:all.filter(r=>r.store.kind==='local'&&!r.done).length,costco:all.filter(r=>r.store.kind==='costco'&&!r.done).length,online:all.filter(r=>r.store.kind==='online'&&!r.done).length};
- return `<div class="section-head" style="margin-top:0"><div><div class="eyebrow">YOUR GROCERY GAME PLAN</div><h1 style="margin:5px 0 8px">Shopping lists</h1><p class="tagline">${done} of ${all.length} checked · Meal needs + household extras + stock-up trips</p></div><div class="buttonrow"><button class="button smallbtn" data-action="copyShopping">▣ Copy view</button><button class="button smallbtn" data-action="copyAllShopping">Copy all</button><button class="button primary smallbtn" data-action="addGrocery">＋ Add item</button></div></div>
+ return `<div class="section-head" style="margin-top:0"><div><div class="eyebrow">YOUR GROCERY GAME PLAN</div><h1 style="margin:5px 0 8px">Shopping lists</h1><p class="tagline">${done} of ${all.length} checked · Meal needs + household extras + stock-up trips</p></div><div class="buttonrow"><button class="button smallbtn" data-action="copyShopping">▣ Copy view</button><button class="button smallbtn" data-action="copyAllShopping">Copy all</button><button class="button smallbtn" data-action="voiceAdd">🎤 Say it</button><button class="button primary smallbtn" data-action="addGrocery">＋ Add item</button></div></div>
  <div class="grid three" style="margin-bottom:14px"><div class="stat"><div class="stat-label">Local stores</div><strong>${counts.local}</strong><span class="small muted">Items left</span></div><div class="stat"><div class="stat-label">Bulk stock-up</div><strong>${counts.costco}</strong><span class="small muted">For your next trip</span></div><div class="stat"><div class="stat-label">Online shopping</div><strong>${counts.online}</strong><span class="small muted">For delivery or shipping</span></div></div>
  <div class="softpanel" style="margin-bottom:14px"><b>Smart store suggestions, your choice:</b> Items start at practical stores, and you can change any destination. Bulk and warehouse trips (Costco, Sam’s Club…) get their own list, and online orders are kept separate. Add or remove stores in Settings.<div class="tiny" style="margin-top:5px">Store suggestions do not verify price, local inventory, delivery coverage or membership requirements. Check availability directly with each retailer.</div></div>
  <div class="softpanel" style="margin-bottom:12px"><b>Make purchases work for you.</b> Save a receipt or PDF invoice, enter its line prices, and review your actual price trends. <button class="button smallbtn" data-tab="receipts">▧ Receipts</button> <button class="button smallbtn" data-tab="insights">↗ Buying power</button></div>
@@ -431,6 +432,7 @@ document.addEventListener('click',ev=>{const a=ev.target.closest('[data-action]'
 document.addEventListener('submit',ev=>{const form=ev.target.closest('[data-form]');if(!form)return;ev.preventDefault();const v=Object.fromEntries(new FormData(form).entries());
  if(form.dataset.form==='spice'){saveSpice(v);return;}
  if(form.dataset.form==='setup'){saveSetup(form);return;}
+ if(form.dataset.form==='voice'){saveVoice(form);return;}
  if(form.dataset.form==='store'){saveStore(v);return;}
  if(form.dataset.form==='newSpace'){saveNewSpace(v);return;}
  if(form.dataset.form==='appliance'){saveAppliance(form);return;}
@@ -618,7 +620,7 @@ function renderInsights(){
 async function exportBundle(){try{const media=await getAllMedia();const encoded=[];for(const m of media){const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(m.blob)});encoded.push({id:m.id,name:m.name,type:m.type,dataUrl})}download('shelf-to-supper-full-backup-'+isoDate(new Date())+'.json',JSON.stringify({...db,__media:encoded}),'application/json');device.lastBackup=Date.now();saveDevice();toast(`Backup includes ${encoded.length} photo / document attachments.`)}catch(e){toast('Could not export photos / receipts. Use a hosted HTTPS browser if this preview blocks storage.')}}
 
 // Version 5 — family-friendly setup, simple mode, family sharing and automatic app updates.
-const APP_VERSION='5.0.0';
+const APP_VERSION='5.1.0';
 const DEVICE_KEY='shelf-to-supper-device'; // per-phone preferences; never shared with family
 const device=(()=>{try{return JSON.parse(localStorage.getItem(DEVICE_KEY))||{}}catch(e){return {}}})();
 const saveDevice=()=>{try{localStorage.setItem(DEVICE_KEY,JSON.stringify(device))}catch(e){}};
@@ -727,13 +729,55 @@ async function checkUpdate(){const reg=await navigator.serviceWorker?.getRegistr
  try{await reg.update();toast(reg.installing||reg.waiting?'Update found — installing now.':'You have the latest version.')}catch(e){toast('Can’t reach the website right now. Try again when online.')}}
 
 const V5_ACTIONS={addStore:storeDialog,removeStore:el=>removeStore(el.dataset.id),addSpace:spaceDialog,removeSpace:el=>removeSpace(el.dataset.id),
- shareFamily,mergeFamily:()=>pickFile(f=>loadFamilyFile(f,false)),joinFamily:()=>pickFile(f=>loadFamilyFile(f,true)),checkUpdate,reloadApp:()=>location.reload(),
+ shareFamily,mergeFamily:()=>pickFile(f=>loadFamilyFile(f,false)),joinFamily:()=>pickFile(f=>loadFamilyFile(f,true)),checkUpdate,reloadApp:()=>location.reload(),voiceAdd:voiceDialog,voiceListen,
  dismissNews:()=>{device.seenV5=true;saveDevice();render()},snoozeBackup:()=>{device.snooze=Date.now()+7*86400000;saveDevice();render()}};
 function v5Change(el){
  if(el.id==='householdName'){db.settings.household=el.value.trim().slice(0,40);persist();render();return true}
  if(el.id==='homeArea'){db.settings.area=el.value.trim().slice(0,40);persist();render();return true}
  if(el.id==='simpleMode'){device.simple=el.checked;saveDevice();render();toast(device.simple?'Simple mode on for this phone.':'All tools are showing.');return true}
  return false}
+// ---------- Voice: say what you need, confirm, done ----------
+// Uses the phone's built-in speech recognition where the browser offers it; everywhere else the
+// text box works with the keyboard's dictation (🎤) key. Nothing is added until the family confirms.
+const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+const NUMBER_WORDS={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,'a couple':2,'a couple of':2,'a few':3,half:0.5,'a dozen':12,dozen:12};
+const UNIT_WORDS={pound:'lb',pounds:'lb',lb:'lb',lbs:'lb',ounce:'oz',ounces:'oz',oz:'oz',can:'can',cans:'cans',bag:'bag',bags:'bags',box:'box',boxes:'boxes',bottle:'bottle',bottles:'bottles',gallon:'gallon',gallons:'gallons',jar:'jar',jars:'jars',package:'package',packages:'packages',pack:'pack',packs:'packs',bunch:'bunch',bunches:'bunches',head:'head',heads:'heads',dozen:'dozen',loaf:'loaf',loaves:'loaves',carton:'carton',cartons:'cartons'};
+const KEEP_TOGETHER=['macaroni and cheese','mac and cheese','salt and pepper','half and half','peanut butter and jelly','pork and beans','bread and butter pickles','sour cream and onion','oil and vinegar'];
+function parseSpokenList(text){
+ let t=String(text||'').toLowerCase().replace(/[.!?]/g,' ').replace(/\s+/g,' ').trim();
+ for(const k of KEEP_TOGETHER)t=t.split(k).join(k.replace(/ /g,'_')); // underscores keep \band\b from splitting
+ t=t.replace(/^(please |hey |ok |okay )*(add|we need|we're out of|we are out of|i need|get|buy|put|pick up)\s+/,'').replace(/\s+(to|on) (the |our |my )?(shopping |grocery )?list$/,'');
+ const parts=t.split(/\s*(?:,|;|\band also\b|\balso\b|\band then\b|\bplus\b|\band\b)\s*/).map(x=>x.trim()).filter(Boolean);
+ return parts.map(p=>{
+  let qty='',m;const words=Object.keys(NUMBER_WORDS).sort((a,b)=>b.length-a.length).join('|');
+  if((m=p.match(new RegExp(`^(\\d+(?:\\.\\d+)?|${words})\\s+`)))){const n=/^\d/.test(m[1])?Number(m[1]):NUMBER_WORDS[m[1]];p=p.slice(m[0].length);
+   const u=p.match(/^([a-z]+)\s+(?:of\s+)?/);if(u&&UNIT_WORDS[u[1]]&&p.slice(u[0].length)){qty=`${n} ${UNIT_WORDS[u[1]]}`;p=p.slice(u[0].length)}else if(n!==1)qty=String(n)}
+  p=p.replace(/^(some|more|of)\s+/,'').trim();
+  p=p.replace(/_/g,' ');return p?{name:p.charAt(0).toUpperCase()+p.slice(1),qty}:null}).filter(Boolean)}
+let voiceRec=null;
+function voiceDialog(){
+ modal(`${modalHead('🎤 Say what you need')}<p class="muted small">Try: “milk, two pounds of ground beef and paper towels.” You’ll check the list before anything is added.</p>
+ ${Speech?`<button type="button" class="button primary" style="width:100%;min-height:58px;font-size:18px" data-action="voiceListen" id="voice-btn">🎤 Tap and talk</button>`:`<div class="softpanel small">Tap the box below, then the 🎤 on your keyboard to dictate.</div>`}
+ <form data-form="voice" style="margin-top:12px"><div class="field"><label for="voice-text">What I heard</label><textarea id="voice-text" name="text" rows="3" placeholder="milk, eggs, 2 pounds ground beef"></textarea></div><div id="voice-preview" style="margin-top:10px"></div>
+ <div class="field" style="margin-top:10px"><label>Add to</label><select name="trip"><option value="regular">Weekly shopping</option><option value="bulk">Stock-up / bulk trip</option></select></div>
+ <button class="button primary" style="margin-top:12px;width:100%" type="submit">✓ Add to shopping list</button></form>`);
+ if(Speech)voiceListen()}
+function voicePreview(){const box=$('#voice-preview');if(!box)return;const items=parseSpokenList($('#voice-text')?.value);
+ box.innerHTML=items.length?`<div class="choice-grid">${items.map((it,i)=>`<label class="choice"><input type="checkbox" name="pick" value="${i}" checked> ${safe(it.name)}${it.qty?` <span class="pill">${safe(it.qty)}</span>`:''}</label>`).join('')}</div>`:''}
+function voiceListen(){if(!Speech)return;if(voiceRec){voiceRec.stop();return}
+ const rec=new Speech(),field=$('#voice-text'),btn=$('#voice-btn'),start=field?.value?field.value.replace(/[,\s]*$/,', '):'';
+ rec.lang=navigator.language||'en-US';rec.interimResults=true;rec.continuous=false;voiceRec=rec;
+ if(btn)btn.textContent='● Listening… tap to stop';
+ rec.onresult=e=>{const said=[...e.results].map(r=>r[0].transcript).join(' ');if(field){field.value=start+said;voicePreview()}};
+ rec.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed')toast('Allow microphone access for this app in your phone settings, or use the keyboard 🎤.');else if(e.error!=='no-speech'&&e.error!=='aborted')toast('Didn’t catch that — try again.')};
+ rec.onend=()=>{voiceRec=null;const b=$('#voice-btn');if(b)b.textContent='🎤 Tap to add more'};
+ try{rec.start()}catch(e){voiceRec=null}}
+function saveVoice(form){const f=new FormData(form),items=parseSpokenList(f.get('text')),picks=new Set(f.getAll('pick').map(Number));
+ const open=new Set(db.manualGroceries.filter(g=>!g.checked).map(g=>key(g.name)));let added=0;
+ items.forEach((it,i)=>{if(!picks.has(i)||open.has(key(it.name)))return;open.add(key(it.name));db.manualGroceries.push({id:uid(),name:it.name,qty:it.qty,checked:false,trip:f.get('trip')==='bulk'?'bulk':'regular',store:'',source:'voice'});added++});
+ voiceRec?.abort();persist();closeModal();render();toast(added?`Added ${added} item${added===1?'':'s'} to the shopping list.`:'Those are already on the list.')}
+document.addEventListener('input',ev=>{if(ev.target.id==='voice-text')voicePreview()});
+
 syncBase=syncSnapshot();
 
 $('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
