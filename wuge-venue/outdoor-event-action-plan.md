@@ -74,7 +74,23 @@ How many people fit is decided by several limits, not just square footage. Calcu
 
 ---
 
-## 3. Questions to answer first
+## 3. Livewire: what to ask on the first call
+
+Livewire ([livewirenow.com](https://livewirenow.com/), info@livewirenow.com) is a full-service event production company. Listings say it handles staging, rigging, power distribution, sound, lighting, video and on-site logistics. Its listings show both Minnesota and Fargo, ND addresses, so confirm which office would serve Wuge.
+
+- [ ] Which stage do they recommend for our crowd size? Ask for its footprint (width × depth), clearance height, and wing space.
+- [ ] Do they bring their own generators and power distribution? What is the total power draw, and how much fuel will it need?
+- [ ] What does the truck need to get in: how many trucks and how large, the turning radius, and whether the ground needs mats or a hard surface?
+- [ ] How long are setup and strike, how many crew, and when do they need site access?
+- [ ] What is their wind limit, and who makes the weather hold call?
+- [ ] Will a licensed electrician be on site? Can they provide engineering or load ratings for the stage and rigging? The fire marshal may ask for these.
+- [ ] Can they send a certificate of insurance naming the property as additional insured?
+- [ ] What pricing do they offer: a full-package day rate, or a recurring or season rate if we run a series?
+- [ ] After a site walk, will they mark up our site map with where the stage and FOH should go?
+
+---
+
+## 4. Questions to answer first
 1. What event are we designing for: one concert, a recurring series, or renting the space to outside promoters?
 2. Will alcohol be served? It affects permits, insurance, security, and restroom counts.
 3. What is the revenue model: ticketing, venue rental fee, food truck fees, sponsorships? Get a target per event before spending on infrastructure.
