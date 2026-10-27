@@ -1,4 +1,4 @@
-# Wooj Venue — Outdoor Event Action Plan
+# Wuge Venue — Outdoor Event Action Plan
 
 Goal: get the open space ready to host outdoor events (stage, food trucks, restrooms, fenced area) so that a production company like Livewire can arrive, set up, and run a show without having to figure anything out on site.
 
