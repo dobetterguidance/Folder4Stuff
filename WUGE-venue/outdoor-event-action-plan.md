@@ -1,4 +1,4 @@
-# Wuge Venue — Outdoor Event Action Plan
+# WUGE Venue — Outdoor Event Action Plan
 
 Goal: get the open space ready to host outdoor events (stage, food trucks, restrooms, fenced area) so that a production company like Livewire can arrive, set up, and run a show without having to figure anything out on site.
 
@@ -76,7 +76,7 @@ How many people fit is decided by several limits, not just square footage. Calcu
 
 ## 3. Livewire: what to ask on the first call
 
-Livewire ([livewirenow.com](https://livewirenow.com/), info@livewirenow.com) is a full-service event production company. Listings say it handles staging, rigging, power distribution, sound, lighting, video and on-site logistics. Its listings show both Minnesota and Fargo, ND addresses, so confirm which office would serve Wuge.
+Livewire ([livewirenow.com](https://livewirenow.com/), info@livewirenow.com) is a full-service event production company. Listings say it handles staging, rigging, power distribution, sound, lighting, video and on-site logistics. Its listings show both Minnesota and Fargo, ND addresses, so confirm which office would serve WUGE.
 
 - [ ] Which stage do they recommend for our crowd size? Ask for its footprint (width × depth), clearance height, and wing space.
 - [ ] Do they bring their own generators and power distribution? What is the total power draw, and how much fuel will it need?
