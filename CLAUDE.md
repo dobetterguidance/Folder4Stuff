@@ -20,3 +20,7 @@ Live Claude Docs:
 - SBA 504 financing request (the money piece): https://claude.ai/artifact/V95cmffuJXzyxRc8xjtEr9
 
 **Confidentiality:** the OneDrive folders hold the owners' personal and business finances. Don't copy financial figures into this repo.
+
+## Where to save WUGE work
+
+Save every WUGE deliverable straight into the OneDrive `Strategic Plan` folder above, using its naming rule `YYYY-MM-DD_<document>`. Bill will not move files by hand. A cloud session can't write to OneDrive through the Microsoft 365 connector, which is read-only. Do WUGE file work where the OneDrive folder is reachable: Cowork or the Claude desktop app on Bill's computer, or a cloud session with that folder attached through Remote Control.
