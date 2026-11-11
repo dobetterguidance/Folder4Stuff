@@ -14,7 +14,7 @@ Pick **one** of these. Both re-publish on their own whenever this repo changes, 
 
 **Option A: Netlify (works with private repos)**
 1. Sign in at netlify.com and choose **Add new site → Import an existing project → GitHub**.
-2. Pick this repository. Netlify reads `netlify.toml` and publishes the `app/` folder.
+2. Pick this repository and set **Branch to deploy** to `claude/shelf-to-supper-app-1pvtn1` (the repo's default branch holds other work). Netlify reads `netlify.toml` and publishes the `app/` folder.
 3. Copy the `https://….netlify.app` address. You can rename it under *Site settings → Domain*.
 
 **Option B: GitHub Pages**
@@ -44,7 +44,7 @@ Each phone keeps its own copy on the device. To share:
 
 ## 4. Keeping it updated
 
-- **App updates:** push a change to `app/` on `main`. Each phone downloads it the next time the app is opened online and shows **"A new version is ready → Refresh."** Your food data is never touched.
+- **App updates:** push a change to `app/` on the deploy branch. Each phone downloads it the next time the app is opened online and shows **"A new version is ready → Refresh."** Your food data is never touched.
 - **When you release a change,** bump `CACHE` in `app/sw.js` (for example `shelf-to-supper-v5` → `v6`) and `APP_VERSION` in `app/index.html`.
 - **Backups:** the Home screen nudges you if a phone hasn't backed up or shared in two weeks. **Settings → Full backup** saves everything, photos included.
 

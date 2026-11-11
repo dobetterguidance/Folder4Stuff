@@ -1,4 +1,5 @@
-# Connect this repo to Netlify once; every push to main then updates every family phone.
+# Connect this repo to Netlify once (production branch: claude/shelf-to-supper-app-1pvtn1);
+# every push to that branch then updates every family phone.
 [build]
   publish = "app"
 
